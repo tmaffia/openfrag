@@ -126,4 +126,14 @@ public class User {
     public void setModified(Date modified) {
         this.modified = modified;
     }
+
+    public Locale createLocaleFromString() {
+        locale = Locale.forLanguageTag(localeString);
+        return locale;
+    }
+
+    public Path createPathFromString() {
+        path = Paths.get(pathString);
+        return path;
+    }
 }
