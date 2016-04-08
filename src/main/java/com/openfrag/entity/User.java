@@ -20,6 +20,7 @@ public class User {
     private String userName;
     private String firstName;
     private String lastName;
+    @Column( unique = true )
     private String email;
     private String password;
     @Transient
@@ -27,9 +28,12 @@ public class User {
     private String localeString;
     @Transient
     private Path path;
+    @Column( unique = true )
     private String pathString;
     private Date created;
     private Date modified;
+    @OneToOne
+    private UserImage userImage;
 
     public long getId() {
         return id;
