@@ -3,7 +3,6 @@ package com.openfrag.entity;
 import javax.persistence.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 
@@ -18,7 +17,7 @@ public class User {
     @GeneratedValue
     private long id;
 	@Column(unique = true, nullable = false)
-    private String userName;
+    private String username;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
@@ -40,6 +39,21 @@ public class User {
     @OneToOne
     private UserImage userImage;
 
+    public User() {
+        this.created = new Date();
+    }
+
+    public User(String username, String firstName, String lastName,
+                String email, String password, String localeString) {
+
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        setLocaleString(localeString);
+    }
+
     public long getId() {
         return id;
     }
@@ -48,12 +62,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
