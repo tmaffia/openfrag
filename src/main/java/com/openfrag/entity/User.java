@@ -91,12 +91,9 @@ public class User {
         this.locale = locale;
     }
 
-    public String getLocaleString() {
-        return localeString;
-    }
-
-    public void setLocaleString(String localeString) {
-        this.localeString = localeString;
+    public Locale setLocaleString(String localeString) {
+        this.locale = Locale.forLanguageTag(localeString);
+        return locale;
     }
 
     public Path getPath() {
@@ -107,12 +104,9 @@ public class User {
         this.path = path;
     }
 
-    public String getPathString() {
-        return pathString;
-    }
-
-    public void setPathString(String pathString) {
-        this.pathString = pathString;
+    public Path setPathString(String pathString) {
+        this.path = Paths.get(pathString);
+        return path;
     }
 
     public Date getCreated() {
@@ -131,13 +125,18 @@ public class User {
         this.modified = modified;
     }
 
-    public Locale createLocaleFromString() {
-        locale = Locale.forLanguageTag(localeString);
-        return locale;
+    public UserImage getUserImage() {
+        return userImage;
     }
 
-    public Path createPathFromString() {
-        path = Paths.get(pathString);
-        return path;
+    public void setUserImage(UserImage userImage) {
+        this.userImage = userImage;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void setPathAndLocaleStrings() {
+        this.pathString = path.toString();
+        this.localeString = locale.toLanguageTag();
     }
 }
