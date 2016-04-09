@@ -3,6 +3,7 @@ package com.openfrag.entity;
 import javax.persistence.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 
@@ -16,19 +17,23 @@ public class User {
     @Id
     @GeneratedValue
     private long id;
-	@Column( unique = true )
+	@Column(unique = true, nullable = false)
     private String userName;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
-    @Column( unique = true )
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
     private String password;
     @Transient
     private Locale locale;
+    @Column(name = "locale", nullable = false)
     private String localeString;
     @Transient
     private Path path;
-    @Column( unique = true )
+    @Column(name = "path", unique = true, nullable = false)
     private String pathString;
     private Date created;
     private Date modified;
@@ -133,10 +138,17 @@ public class User {
         this.userImage = userImage;
     }
 
+    @PostLoad
+    public void setPathAndLocaleFromDatabase() {
+        setPathString(pathString);
+        setLocaleString(localeString);
+    }
+
     @PrePersist
     @PreUpdate
     public void setPathAndLocaleStrings() {
         this.pathString = path.toString();
         this.localeString = locale.toLanguageTag();
+        this.modified = new Date();
     }
 }
