@@ -14,7 +14,7 @@ public class UserImage {
     private long id;
     @OneToOne
     private User user;
-    @Column( unique = true )
+    @Column(unique = true)
     private String path;
 
     public long getId() {
