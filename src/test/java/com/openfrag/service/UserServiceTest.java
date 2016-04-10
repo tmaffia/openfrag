@@ -4,6 +4,8 @@ import com.openfrag.OpenfragApplication;
 import com.openfrag.entity.User;
 import com.openfrag.exception.CreateUserException;
 import com.openfrag.exception.DeleteUserException;
+import com.openfrag.exception.EmailAlreadyRegisteredException;
+import com.openfrag.exception.UsernameAlreadyRegisteredException;
 import com.openfrag.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -13,7 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.fail;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by tmaffia on 4/10/16.
@@ -50,6 +53,8 @@ public class UserServiceTest {
         } catch (CreateUserException e) {
             fail();
         }
+        assertEquals(u.getUsername(),
+                userRepository.findByEmail(u.getEmail()).getUsername());
     }
 
     @Test
@@ -60,5 +65,24 @@ public class UserServiceTest {
         }catch (DeleteUserException e) {
             fail();
         }
+        assertNull(userRepository.findByEmail(u.getEmail()));
+    }
+
+    @Test
+    public void testUserExistsByUsername() {
+        User u = new User();
+        u.setUsername("abcd");
+        assertTrue(target.userExists(u));
+        u.setUsername("doesnt_exist");
+        assertFalse(target.userExists(u));
+    }
+
+    @Test
+    public void testUserExistsByEmail() {
+        User u = new User();
+        u.setEmail("email1@email.com");
+        assertTrue(target.userExists(u));
+        u.setEmail("e@emai.com");
+        assertFalse(target.userExists(u));
     }
 }

@@ -3,6 +3,8 @@ package com.openfrag.service;
 import com.openfrag.entity.User;
 import com.openfrag.exception.CreateUserException;
 import com.openfrag.exception.DeleteUserException;
+import com.openfrag.exception.EmailAlreadyRegisteredException;
+import com.openfrag.exception.UsernameAlreadyRegisteredException;
 import com.openfrag.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,5 +41,13 @@ public class UserService {
         } catch (IOException e) {
             throw new DeleteUserException("Error Deleting User");
         }
+    }
+
+    public boolean userExists(User u) {
+        if (userRepository.findByUsername(u.getUsername()) != null
+                || userRepository.findByEmail(u.getEmail()) != null) {
+            return true;
+        }
+        return false;
     }
 }
