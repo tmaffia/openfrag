@@ -2,6 +2,8 @@ package com.openfrag.repository;
 
 import com.openfrag.OpenfragApplication;
 import com.openfrag.entity.User;
+import com.openfrag.exception.InvalidPasswordException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,11 +28,25 @@ public class UserRepositoryTest {
     @Before
     public void setup() {
         User u = new User("abc", "first", "last", "email@email.com",
-                "password", "en-us");
+                "Password12", "en-us");
         u.setPathString("/home/user/Desktop");
         if (target.findByUsername("abc") == null) {
             target.saveAndFlush(u);
         }
+    }
+
+    @After
+    public void destory() {
+        target.delete(target.findByEmail("email@email.com"));
+    }
+
+
+    @Test(expected = RuntimeException.class)
+    public void testCreateInvalidPassword() {
+        User u = new User("abcd", "first", "last", "email2@email.com",
+                "password", "en-us");
+        u.setPathString("/home/user2/Desktop");
+        target.saveAndFlush(u);
     }
 
     @Test
@@ -47,7 +63,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByEmailAndPassword() {
-        User u = target.findByEmailAndPassword("email@email.com", "password");
+        User u = target.findByEmailAndPassword("email@email.com", "Password12");
         assertEquals("abc", u.getUsername());
     }
 

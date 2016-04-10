@@ -1,5 +1,7 @@
 package com.openfrag.entity;
 
+import com.openfrag.listener.UserValidationListener;
+
 import javax.persistence.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +13,7 @@ import java.util.Locale;
  */
 
 @Entity
+@EntityListeners({UserValidationListener.class})
 public class User {
 
     @Id

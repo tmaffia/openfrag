@@ -13,6 +13,7 @@
 .gradle
 build/
 .idea/
+tmp/
 
 # Ignore Gradle GUI config
 gradle-app.setting
